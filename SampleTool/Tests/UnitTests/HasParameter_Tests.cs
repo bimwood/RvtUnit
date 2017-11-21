@@ -5,6 +5,7 @@ using System.Text;
 using NUnit.Framework;
 using Autodesk.Revit.DB;
 using SampleTool.Helper;
+using Autodesk.Revit.UI;
 
 namespace SampleTool.Tests.UnitTests
 {
@@ -38,5 +39,15 @@ namespace SampleTool.Tests.UnitTests
 			IParameterHelper parameterHelper = new ParameterHelper(document);
 			Assert.That(parameterHelper.HasParameter("Project Name"), Iz.True);
 		}
-	}
+
+        [Test]
+        public void Test_Test()
+        {
+            UIDocument uiDoc = Helpers.GeneralHelper.ActiveUIDocument;
+            Assert.IsNull(uiDoc);
+            //Document document = Helpers.GeneralHelper.ActiveUIDocument.Document;
+            //IParameterHelper parameterHelper = new ParameterHelper(document);
+            //Assert.That(parameterHelper.HasParameter("Project Name"), Iz.True);
+        }
+    }
 }

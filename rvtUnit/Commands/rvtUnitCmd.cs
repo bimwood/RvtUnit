@@ -91,7 +91,7 @@ namespace rvtUnit.Commands
          _activeDoc = commandData.Application.ActiveUIDocument.Document;
 
 		 GeneralHelper.ActiveUIDocument = commandData.Application.ActiveUIDocument;
-
+            TaskDialog.Show("Hello","Hello");
          DoAction();
 
          // Return Cancelled so that this command is not recorded as modifying Document:

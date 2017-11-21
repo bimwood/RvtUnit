@@ -64,6 +64,7 @@ namespace SampleTool.Helper
 
 		/// <summary>
 		/// Gets the revit parameter from project info
+        /// If more than one parameter has the same name, returns the 'first' one
 		/// </summary>
 		/// <param name="parameterName">name of the parameter</param>
 		/// <returns>parameter or null if not found</returns>
@@ -74,13 +75,10 @@ namespace SampleTool.Helper
 			{
 				return null;
 			}
-			Parameter theParam = pInfo.get_Parameter(parameterName);
-			if (null == theParam)
-			{
-				return null;
-			}
 
-			return theParam;
-		}
-	}
+            List<Parameter> paramList = pInfo.GetParameters(parameterName).ToList<Parameter>();
+            return (0 < paramList.Count) ? paramList[0] : null;
+
+		}       
+    }
 }

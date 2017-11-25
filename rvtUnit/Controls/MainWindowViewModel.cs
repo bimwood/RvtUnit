@@ -14,6 +14,7 @@ using System.Reflection;
 using rvtUnit.Helpers;
 using System.Windows.Media;
 using System.Windows;
+using System.Diagnostics;
 
 namespace rvtUnit.Controls
 {
@@ -48,7 +49,8 @@ namespace rvtUnit.Controls
          string dllFileName = args.Name.Substring(0, args.Name.IndexOf(",", StringComparison.InvariantCulture)) + ".dll";
 
 #if DEBUG
-         // Log something to event log to show assemlby being resolved
+            Debug.WriteLine("HandleAssemblyResolve: " + dllFileName);
+            // Log something to event log to show assembly being resolved
 #endif
 
          string targetFile;
@@ -65,7 +67,7 @@ namespace rvtUnit.Controls
             }
          }
 
-         // If the asembly is still null, try load it from the current directory
+         // If the assembly is still null, try load it from the current directory
          if (theAsm == null)
          {
 
@@ -261,7 +263,7 @@ namespace rvtUnit.Controls
          theTestPackage.Settings.Add("DomainUsage", DomainUsage.None);
          RemoteTestRunner testRunner = new RemoteTestRunner();
          testRunner.Load(theTestPackage);
-         TestResult testResult = testRunner.Run(NullListener.NULL, testfilter, false, LoggingThreshold.Off);
+         TestResult testResult = testRunner.Run(NullListener.NULL, testfilter, false, LoggingThreshold.All);
 
          // Dispose
          testRunner.Unload();

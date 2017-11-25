@@ -49,11 +49,13 @@ namespace Helpers
 
 		public static UIDocument ActiveUIDocument { get; set; }
 
-		/// <summary>
-		/// Finds the Revit window handle.
-		/// </summary>
-		/// <returns>Revit window handle.</returns>
-		private static IntPtr FindRevitWindowHandle()
+        public static string TestProperty { get; set; } = "Initial State";
+
+        /// <summary>
+        /// Finds the Revit window handle.
+        /// </summary>
+        /// <returns>Revit window handle.</returns>
+        private static IntPtr FindRevitWindowHandle()
 		{
 			try
 			{

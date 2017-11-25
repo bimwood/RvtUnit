@@ -33,26 +33,27 @@ using NUnit.Util;
 using rvtUnit.Controls;
 using System.Windows.Interop;
 using rvtUnit.Helpers;
+using System.Diagnostics;
 
 namespace rvtUnit.Commands
 {
 
-   /// <summary>
-   /// Revit external command to do integration.
-   /// </summary>
+    /// <summary>
+    /// Revit external command to do integration.
+    /// </summary>
 #if RVT2011
    [Regeneration(RegenerationOption.Manual)]
 #endif
 #if !RVT2010
-   [Transaction(TransactionMode.Manual)]
+    [Transaction(TransactionMode.Manual)]
 #endif
-   public class rvtUnitCmd : IExternalCommand
-   {
-      // ======================================================== FIELDS === //
+    public class rvtUnitCmd : IExternalCommand
+    {
+        // ======================================================== FIELDS === //
 
-      private Document _activeDoc;
+        private Document _activeDoc;
 
-      // ==================================================== PROPERTIES === //
+        // ==================================================== PROPERTIES === //
 
 #if RVT2010
 
@@ -77,37 +78,44 @@ namespace rvtUnit.Commands
 
 #else
 
-      /// <summary>
-      /// Revit external command entry point.
-      /// </summary>
-      /// <param name="commandData">A ExternalCommandData object which contains reference to Application and View needed by external command.</param>
-      /// <param name="message">Error message can be returned by external command.</param>
-      /// <param name="elements">Element set could be used for transferring elements between external command and Autodesk Revit.</param>
-      /// <returns>
-      /// Result tells whether the excution fail, succeed or was canceled by user. If not succeed, Autodesk Revit should undo any changes made by the external command. 
-      /// </returns>
-      public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
-      {
-         _activeDoc = commandData.Application.ActiveUIDocument.Document;
+        /// <summary>
+        /// Revit external command entry point.
+        /// </summary>
+        /// <param name="commandData">A ExternalCommandData object which contains reference to Application and View needed by external command.</param>
+        /// <param name="message">Error message can be returned by external command.</param>
+        /// <param name="elements">Element set could be used for transferring elements between external command and Autodesk Revit.</param>
+        /// <returns>
+        /// Result tells whether the excution fail, succeed or was canceled by user. If not succeed, Autodesk Revit should undo any changes made by the external command. 
+        /// </returns>
+        public Result Execute(ExternalCommandData commandData, ref string message, ElementSet elements)
+        {
 
-		 GeneralHelper.ActiveUIDocument = commandData.Application.ActiveUIDocument;
-            TaskDialog.Show("Hello","Hello");
-         DoAction();
+            AppDomain ad = AppDomain.CurrentDomain;
+            int appDomainId = AppDomain.CurrentDomain.Id;
+            Debug.WriteLine("rvtUnitCmd AppDomain: " + appDomainId);
 
-         // Return Cancelled so that this command is not recorded as modifying Document:
-         return Result.Cancelled;
-      }
+            _activeDoc = commandData.Application.ActiveUIDocument.Document;
+
+            GeneralHelper.ActiveUIDocument = commandData.Application.ActiveUIDocument;
+            GeneralHelper.TestProperty = "State changed by rvtUnitCmd";
+            TaskDialog.Show("Hello", "Hello");
+            Debug.WriteLine("GeneralHelper.TestProperty: " + GeneralHelper.TestProperty);
+            DoAction();
+
+            // Return Cancelled so that this command is not recorded as modifying Document:
+            return Result.Cancelled;
+        }
 
 #endif
 
-      private void DoAction()
-      {
-          MainWindowViewModel vm = new MainWindowViewModel();
-          MainWindow view = new MainWindow(vm);
-		  GeneralHelper.SetRevitAsWindowOwner(view);
-          view.ShowDialog();
-      }
+        private void DoAction()
+        {
+            MainWindowViewModel vm = new MainWindowViewModel();
+            MainWindow view = new MainWindow(vm);
+            GeneralHelper.SetRevitAsWindowOwner(view);
+            view.ShowDialog();
+        }
 
-   }  // End of class rvtUnitCmd
+    }  // End of class rvtUnitCmd
 
 }  // End of namespace rvtUnit.Commands
